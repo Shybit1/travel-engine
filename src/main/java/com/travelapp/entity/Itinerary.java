@@ -2,11 +2,10 @@ package com.travelapp.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "itineraries", indexes = {
-    @Index(name = "idx_itinerary_user_id", columnList = "user_id")
+    @Index(name = "idx_itinerary_destination", columnList = "destination_id")
 })
 public class Itinerary {
 
@@ -15,24 +14,12 @@ public class Itinerary {
     @Column(columnDefinition = "INT UNSIGNED")
     private Long id;
 
-    @Column(name = "user_id", nullable = false, columnDefinition = "INT UNSIGNED")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "destination_id", foreignKey = @ForeignKey(name = "fk_itinerary_destination"))
+    private Destination destination;
 
-    @Column(nullable = false)
-    private String title;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @ManyToMany
-    @JoinTable(
-        name = "itinerary_destinations",
-        joinColumns = @JoinColumn(name = "itinerary_id"),
-        inverseJoinColumns = @JoinColumn(name = "destination_id"),
-        foreignKey = @ForeignKey(name = "fk_itinerary_dest_itinerary"),
-        inverseForeignKey = @ForeignKey(name = "fk_itinerary_dest_destination")
-    )
-    private List<Destination> destinations;
+    @Column(name = "user_name", nullable = false)
+    private String userName;
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -40,19 +27,25 @@ public class Itinerary {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @Column(columnDefinition = "TEXT")
+    private String notes;
+
+    @Column(name = "day_plan", columnDefinition = "TEXT")
+    private String dayPlan; // stores JSON as text
+
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public List<Destination> getDestinations() { return destinations; }
-    public void setDestinations(List<Destination> destinations) { this.destinations = destinations; }
+    public Destination getDestination() { return destination; }
+    public void setDestination(Destination destination) { this.destination = destination; }
+    public String getUserName() { return userName; }
+    public void setUserName(String userName) { this.userName = userName; }
     public LocalDate getStartDate() { return startDate; }
     public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
     public LocalDate getEndDate() { return endDate; }
     public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
+    public String getDayPlan() { return dayPlan; }
+    public void setDayPlan(String dayPlan) { this.dayPlan = dayPlan; }
 }

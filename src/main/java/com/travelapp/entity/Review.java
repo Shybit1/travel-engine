@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "reviews", indexes = {
-    @Index(name = "idx_review_destination_id", columnList = "destination_id")
+    @Index(name = "idx_review_destination", columnList = "destination_id")
 })
 public class Review {
 
@@ -19,13 +19,16 @@ public class Review {
     private Destination destination;
 
     @Column(nullable = false)
-    private Integer rating;
+    private String author;
 
-    @Column(name = "reviewer_name")
-    private String reviewerName;
+    @Column(nullable = false)
+    private Integer rating;
 
     @Column(columnDefinition = "TEXT")
     private String comment;
+
+    @Column(name = "helpful_count", nullable = false)
+    private Integer helpfulCount = 0;
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
@@ -35,12 +38,14 @@ public class Review {
     public void setId(Long id) { this.id = id; }
     public Destination getDestination() { return destination; }
     public void setDestination(Destination destination) { this.destination = destination; }
+    public String getAuthor() { return author; }
+    public void setAuthor(String author) { this.author = author; }
     public Integer getRating() { return rating; }
     public void setRating(Integer rating) { this.rating = rating; }
-    public String getReviewerName() { return reviewerName; }
-    public void setReviewerName(String reviewerName) { this.reviewerName = reviewerName; }
     public String getComment() { return comment; }
     public void setComment(String comment) { this.comment = comment; }
+    public Integer getHelpfulCount() { return helpfulCount; }
+    public void setHelpfulCount(Integer helpfulCount) { this.helpfulCount = helpfulCount; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
