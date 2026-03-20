@@ -3,6 +3,8 @@ package com.travelapp.entity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "destinations", indexes = {
@@ -76,7 +78,25 @@ public class Destination {
     }
 
     public enum BudgetLevel {
-        Budget, Mid_Range, Luxury
+        Budget,
+        @JsonProperty("Mid-Range")
+        Mid_Range,
+        Luxury;
+
+        @Override
+        public String toString() {
+            return this.name().replace('_', '-');
+        }
+
+        @JsonCreator
+        public static BudgetLevel fromString(String key) {
+            for (BudgetLevel b : BudgetLevel.values()) {
+                if (b.toString().equalsIgnoreCase(key)) {
+                    return b;
+                }
+            }
+            return null;
+        }
     }
 
     public enum TripType {
